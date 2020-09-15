@@ -305,4 +305,19 @@ trait HandlesConversations
         $parameters[] = $conversation;
         call_user_func_array($next, $parameters);
     }
+    /**
+     * Remove a stored conversation array from the cache for a given message.
+     *
+     * @param null|IncomingMessage $message
+     */
+    public function forceRemoveStoredConversation($message = null)
+    {
+        /*
+         * Only remove it from the cache if it was not modified
+         * after we loaded the data from the cache.
+         */
+
+        $this->cache->pull($this->message->getConversationIdentifier());
+        $this->cache->pull($this->message->getOriginatedConversationIdentifier());
+    }
 }
